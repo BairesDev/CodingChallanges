@@ -1,58 +1,67 @@
 require 'date'
-require 'active_support/core_ext/numeric/time.rb'
-#inputs
+require 'csv'
 
-if ARGV.length != 2
-  puts "Type Name of movie and duration minutes \n"
-  puts "Example : 'Liar Liar' 86"
+if ARGV.length != 1
+  puts "Usage: Type Name of csv file with movies data"
+  puts "Example : ruby movie_scheduler.rb movies.csv "
   exit 0
 end
 
+file_name = ARGV[0]
 
-movie_title = ARGV[0]
-movie_minutes = ARGV[1].to_i
+# Add minutes method to Numeric class.
+class Numeric
+  def minutes; self/1440.0 end
+  alias :minute :minutes
+end
 
+now_date = DateTime.now
+# There are 4 minutes of gap before end of day operation (end_time).
 operation = [
   {
     name: 'Weekday',
-    start_time: DateTime.now.change({ hour: 11 }),
-    end_time: DateTime.now.change({ hour: 23 })
+    start_time: DateTime.new(now_date.year, now_date.month, now_date.day, 11),
+    end_time: DateTime.new(now_date.year, now_date.month, now_date.day, 22, 56)
   },
   {
     name: 'Weekend',
-    start_time: DateTime.now.change({ hour: 10, min: 30, sec: 0 }),
-    end_time: DateTime.now.change({ hour: 23, min: 59, sec: 59 })
+    start_time: DateTime.new(now_date.year, now_date.month, now_date.day, 10, 30),
+    end_time: DateTime.new(now_date.year, now_date.month, now_date.day, 23, 56)
   }
 ]
 
 def scheduler(schedule, movie_minutes, start_time, end_time)
-  preview_minutes = 15
-  after_minutes = 20
+  after = 20
 
-  movie_start = start_time + preview_minutes.minutes
-  movie_end  = movie_start + movie_minutes.minutes
+  # Condition for the first iteration.
+  movie_end =  schedule.any? ? end_time - after.minutes + 1.minute : end_time
+  movie_start = movie_end - movie_minutes.minutes
 
-  if movie_end < end_time
+  # cinema requires 15 minutes after opening before first movie is shown
+  if movie_start > (start_time + 15.minutes)
 
     schedule << {
       movie_start: movie_start,
       movie_end: movie_end
     }
-    scheduler(schedule, movie_minutes, movie_end + after_minutes.minutes, end_time )
+    end_time = movie_start - after.minutes
+    scheduler(schedule, movie_minutes, start_time, end_time)
   else
-    schedule
+    schedule.reverse
   end
 end
 
-def schedule_printer(operation_name, movie_title, schedule)
+def schedule_printer(operation_name, schedule)
   puts "#{operation_name} \n"
   puts schedule.map {|s| "#{s[:movie_start].strftime("%I:%M %p")} - #{s[:movie_end].strftime("%I:%M %p")} \n"}
+  puts "\n"
 end
 
-puts "#{movie_title} \n\n"
-
-operation.each do |op|
-  movie_schedule  = scheduler([], movie_minutes, op[:start_time], op[:end_time])
-  schedule_printer(op[:name], movie_title, movie_schedule)
+CSV.foreach(file_name, :headers => true) do |row|
+  puts "=================================================\n"
+  puts "#{row['name']} \n\n"
+  operation.each do |op|
+    movie_schedule  = scheduler([], row['minutes'].to_i, op[:start_time], op[:end_time])
+    schedule_printer(op[:name], movie_schedule)
+  end
 end
-
