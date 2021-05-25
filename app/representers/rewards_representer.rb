@@ -50,11 +50,11 @@ class RewardsRepresenter
     end
 
     def orders
-      @orders ||= attrs[:orders]
+      @orders ||= attrs[:orders] * 1.0
     end
 
     def points_per_order
-      (points / orders)
+      (points / orders).ceil
     end
   end
 end

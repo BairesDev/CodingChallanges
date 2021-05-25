@@ -159,16 +159,14 @@ describe JsonParserService do
 
     let(:response) { described_class.call(input.to_json) }
 
-    it 'creates a key on hash with the customer' do
+    it 'gives the response sorted by rewards' do
       expect(response.keys).to eq(%w[Jessica Will Elizabeth])
     end
 
     it 'gives the right amount for each customer' do
-      expect(response).to eq(
-        'Jessica' => { points: 22, orders: 2 },
-        'Will' => { points: 3, orders: 2 },
-        'Elizabeth' => { points: 0, orders: 0 }
-      )
+      expect(response['Jessica']).to eq(points: 22, orders: 2)
+      expect(response['Will']).to eq(points: 3, orders: 2)
+      expect(response['Elizabeth']).to eq(points: 0, orders: 0)
     end
   end
 end

@@ -20,6 +20,14 @@ class JsonParserService
   end
 
   def call
+    count_by_customer.sort_by { |customer, attrs| -attrs[:points] }.to_h
+  end
+
+  private
+
+  attr_reader :json
+
+  def count_by_customer
     customers.each_with_object({}) do |customer, response|
       response[customer] = {
         points: points_by_customer(customer) || 0,
@@ -27,10 +35,6 @@ class JsonParserService
       }
     end
   end
-
-  private
-
-  attr_reader :json
 
   def raise_input_error
     raise InputError, 'Invalid input'

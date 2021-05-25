@@ -2,8 +2,8 @@
    "events":[
       {
          "action":"new_customer",
-         "name":"Jessica",
-         "timestamp":"2020-07-01T00:00:00-05:00"
+         "name":"Elizabeth",
+         "timestamp":"2020-07-01T12:00:00-05:00"
       },
       {
          "action":"new_customer",
@@ -12,8 +12,8 @@
       },
       {
          "action":"new_customer",
-         "name":"Elizabeth",
-         "timestamp":"2020-07-01T12:00:00-05:00"
+         "name":"Jessica",
+         "timestamp":"2020-07-01T00:00:00-05:00"
       },
       {
          "action":"new_order",
