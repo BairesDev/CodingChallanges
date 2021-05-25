@@ -5,17 +5,17 @@ require 'services/json_parser_service'
 describe JsonParserService do
   context 'when input is invalid' do
     it 'raise error' do
-      expect do
+      expect {
         described_class.call({ foo: :bar })
-      end.to raise_error JsonParserService::InputError, 'Invalid input'
+      }.to raise_error JsonParserService::InputError, 'Invalid input'
     end
   end
 
   context 'when input is empty' do
     it 'raise error' do
-      expect do
+      expect {
         described_class.call({}.to_json)
-      end.to raise_error JsonParserService::InputError, 'Invalid input'
+      }.to raise_error JsonParserService::InputError, 'Invalid input'
     end
   end
 
@@ -31,7 +31,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives 1 point for $3 expend' do
-      expect(response['Jessica']).to eq(points: nil)
+      expect(response['Jessica']).to eq(points: 0, orders: 0)
     end
   end
 
@@ -40,7 +40,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 3.5, timestamp: '2020-07-01T12:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 3.5, timestamp: '2020-07-01T12:01:00-05:00' }
         ]
       }
     end
@@ -48,7 +48,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives no reward' do
-      expect(response['Jessica']).to eq(points: 0)
+      expect(response['Jessica']).to eq(points: 0, orders: 1)
     end
   end
 
@@ -57,7 +57,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 10, timestamp: '2020-07-01T09:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 10, timestamp: '2020-07-01T09:01:00-05:00' }
         ]
       }
     end
@@ -65,7 +65,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives no reward' do
-      expect(response['Jessica']).to eq(points: 0)
+      expect(response['Jessica']).to eq(points: 0, orders: 1)
     end
   end
 
@@ -74,7 +74,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 16.5, timestamp: '2020-07-01T12:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 16.5, timestamp: '2020-07-01T12:01:00-05:00' }
         ]
       }
     end
@@ -82,7 +82,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives 1 point for $3 expend' do
-      expect(response['Jessica']).to eq(points: 6)
+      expect(response['Jessica']).to eq(points: 6, orders: 1)
     end
   end
 
@@ -91,7 +91,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 16.5, timestamp: '2020-07-01T11:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 16.5, timestamp: '2020-07-01T11:01:00-05:00' }
         ]
       }
     end
@@ -99,7 +99,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives 1 point for $2 expend' do
-      expect(response['Jessica']).to eq(points: 9)
+      expect(response['Jessica']).to eq(points: 9, orders: 1)
     end
   end
 
@@ -108,7 +108,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 16.5, timestamp: '2020-07-01T10:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 16.5, timestamp: '2020-07-01T10:01:00-05:00' }
         ]
       }
     end
@@ -116,7 +116,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives 1 point for $1 expend' do
-      expect(response['Jessica']).to eq(points: 17)
+      expect(response['Jessica']).to eq(points: 17, orders: 1)
     end
   end
 
@@ -125,7 +125,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 16.5, timestamp: '2020-07-01T14:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 16.5, timestamp: '2020-07-01T14:01:00-05:00' }
         ]
       }
     end
@@ -133,7 +133,7 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives 1 point for $1 expend' do
-      expect(response['Jessica']).to eq(points: 17)
+      expect(response['Jessica']).to eq(points: 17, orders: 1)
     end
   end
 
@@ -142,7 +142,7 @@ describe JsonParserService do
       {
         events: [
           { action: 'new_customer', name: 'Jessica', timestamp: '2020-07-01T00:00:00-05:00' },
-          { action: 'new_order', name: 'Jessica', amount: 3, timestamp: '2020-07-01T09:01:00-05:00' }
+          { action: 'new_order', customer: 'Jessica', amount: 3, timestamp: '2020-07-01T09:01:00-05:00' }
         ]
       }
     end
@@ -150,21 +150,25 @@ describe JsonParserService do
     let(:response) { described_class.call(json.to_json) }
 
     it 'gives 1 point for $0.25 expend' do
-      expect(response['Jessica']).to eq(points: 12)
+      expect(response['Jessica']).to eq(points: 12, orders: 1)
     end
   end
 
-  context 'when customer has no orders' do
+  context 'when it runs over the whole provided json' do
     let(:json) { JSON.parse(File.read(File.join(SPEC_PATH, 'fixtures', 'sample_input.json'))).deep_symbolize_keys }
 
     let(:response) { described_class.call(json.to_json) }
 
-    xit 'creates a key on hash with the customer' do
-      expect(response.keys).to include('Elizabeth')
+    it 'creates a key on hash with the customer' do
+      expect(response.keys).to eq(%w[Jessica Will Elizabeth])
     end
 
-    xit 'returns empty data for the customer' do
-      expect(response['Elizabeth']).to eq(points: nil)
+    it 'gives the right amount for each customer' do
+      expect(response).to eq(
+        'Jessica' => { points: 22, orders: 2 },
+        'Will' => { points: 3, orders: 2 },
+        'Elizabeth' => { points: 0, orders: 0 }
+      )
     end
   end
 end

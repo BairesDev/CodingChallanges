@@ -15,13 +15,16 @@ class JsonParserService
     @json = JSON.parse(json).deep_symbolize_keys
 
     raise_input_error if @json.empty?
-  rescue TypeError => e
+  rescue TypeError
     raise_input_error
   end
 
   def call
     customers.each_with_object({}) do |customer, response|
-      response[customer] = { points: points_by_customer(customer) }
+      response[customer] = {
+        points: points_by_customer(customer) || 0,
+        orders: orders_by_customer(customer).count
+      }
     end
   end
 
@@ -41,13 +44,17 @@ class JsonParserService
     @events ||= json[:events]
   end
 
+  def orders_by_customer(customer)
+    events.select { |i| i[:customer] == customer && i[:action] == 'new_order' }
+  end
+
   # Get all orders for informed customer
   # calculates the reward for each order
   # and sum all
   def points_by_customer(customer)
-    events.select { |i| i[:name] == customer && i[:action] == 'new_order' }
-          .map    { |i| Reward.new(i).value }
-          .inject(:+)
+    orders_by_customer(customer)
+      .map { |i| Reward.new(i).value }
+      .inject(:+)
   end
 
   class Reward
@@ -75,6 +82,11 @@ class JsonParserService
       @reward ||= (amount / factor).ceil
     end
 
+    # Depending on the your, gives a factor to calculate the reward
+    # 12pm - 1pm	1 point per $3 spent
+    # 11am - 12pm and 1pm - 2pm	1 point per $2 spent
+    # 10am - 11am and 2pm - 3pm	1 point per $1 spent
+    # Any other time	0.25 points per $1
     def factor
       {
         12 => 3,
