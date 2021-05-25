@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require './lib/loader'
+
+require 'app/services/json_parser_service'
+require 'app/representers/rewards_representer'
+
+# Reads the sample input file
+input = File.read(File.join('spec', 'fixtures', 'sample_input.json'))
+
+# Parse the input
+parsed_input = JsonParserService.call(input)
+
+# Represent the parsed json
+response = RewardsRepresenter.show(parsed_input)
+
+puts "\n\n", response

@@ -24,8 +24,8 @@ describe RewardsRepresenter do
 
     it 'returns human readable messages' do
       expect(response).to eq([
-        'Jessica: 22 with 11 points per order.',
-        'Will: 3 with 1 points per order.',
+        'Jessica: 22 points with 11 points per order.',
+        'Will: 3 points with 1 points per order.',
         'Elizabeth: No orders.'
       ])
     end

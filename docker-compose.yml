@@ -1,10 +1,7 @@
 version: '3.1'
 
-networks:
-  net:
-
 services:
-  web:
+  fooda:
     image: fooda
     build: .
     ports:

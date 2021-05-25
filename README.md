@@ -5,12 +5,15 @@ Make sure you have docker and docker compose on your machine, so build everythin
 $ docker-compose build
 ```
 
-and run the tests with 
+and run the tests with
 ```
-$ docker-compose run --rm web rspec
+$ docker-compose run --rm fooda rspec
 ```
 
-if you want run with different 
+if you want to run as a executable, try
+```
+$ docker-compose run --rm fooda bin/runner
+```
 
 # Code structure
 

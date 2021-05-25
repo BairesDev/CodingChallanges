@@ -34,7 +34,7 @@ class RewardsRepresenter
     def to_s
       return no_orders if orders.zero?
 
-      "#{customer}: #{points} with #{points_per_order} points per order."
+      "#{customer}: #{points} points with #{points_per_order} points per order."
     end
 
     private
