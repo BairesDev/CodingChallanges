@@ -13,7 +13,3 @@ services:
       - .env
     volumes:
       - .:/var/app
-    networks:
-      net:
-        aliases:
-          - web
