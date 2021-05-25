@@ -1,15 +1,15 @@
 AllCops:
   SuggestExtensions: false
   NewCops: enable
+  Exclude:
+    - bin/*
 
 Documentation:
   Enabled: false
 
 Metrics/BlockLength:
   Exclude:
-    - 'spec/**/*'
+    - spec/**/*
 
 Style/BlockDelimiters:
   EnforcedStyle: semantic
-
-

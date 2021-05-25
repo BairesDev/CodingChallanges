@@ -20,7 +20,7 @@ class JsonParserService
   end
 
   def call
-    count_by_customer.sort_by { |customer, attrs| -attrs[:points] }.to_h
+    count_by_customer.sort_by { |_customer, attrs| -attrs[:points] }.to_h
   end
 
   private

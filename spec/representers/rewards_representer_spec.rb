@@ -14,8 +14,8 @@ describe RewardsRepresenter do
   context 'when input is valid' do
     let(:input) do
       {
-        'Jessica'   => { points: 22, orders: 2 },
-        'Will'      => { points: 3, orders: 2 },
+        'Jessica' => { points: 22, orders: 2 },
+        'Will' => { points: 3, orders: 2 },
         'Elizabeth' => { points: 0, orders: 0 }
       }
     end
@@ -24,10 +24,10 @@ describe RewardsRepresenter do
 
     it 'returns human readable messages' do
       expect(response).to eq([
-        'Jessica: 22 points with 11 points per order.',
-        'Will: 3 points with 2 points per order.',
-        'Elizabeth: No orders.'
-      ])
+                               'Jessica: 22 points with 11 points per order.',
+                               'Will: 3 points with 2 points per order.',
+                               'Elizabeth: No orders.'
+                             ])
     end
   end
 end

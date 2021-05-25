@@ -10,7 +10,7 @@ class RewardsRepresenter
   end
 
   def initialize(input)
-    raise InputError.new('Invalid input') unless input.is_a?(Hash)
+    raise InputError, 'Invalid input' unless input.is_a?(Hash)
 
     @input = input
   end

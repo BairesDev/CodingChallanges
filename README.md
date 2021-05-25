@@ -15,6 +15,8 @@ if you want to run as a executable, try
 $ docker-compose run --rm fooda bin/runner
 ```
 
+and if you want run it using a `irb` interface, just follow the steps on `bin/runner`
+
 # Code structure
 
 There's a [service](app/services/json_parser_service.rb) responsible for handle the JSON of input and respond with another JSON, containing the customer, the total of points and the number of orders.
