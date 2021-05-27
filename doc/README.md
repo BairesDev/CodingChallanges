@@ -1,3 +1,5 @@
+# The Sequence Diagram
+
 ![Sequence diagram](https://awesomescreenshot.s3.amazonaws.com/image/314264/8744408-fcdf1161fcebb1b47bd3c7b553aa2d0f.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20210527%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210527T233645Z&X-Amz-Expires=28800&X-Amz-SignedHeaders=host&X-Amz-Signature=1c702ffae758a8924a2de25eb3722bbf3fe7a8e0ed6baa538ac39e565a369fa0)
 
 # Starting the process
